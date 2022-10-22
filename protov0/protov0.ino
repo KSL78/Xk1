@@ -9,9 +9,7 @@ Stepper mStepper(stepv,11,9,10,8);
 int a=0,b=0;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 void setup() {
-  // I2C LCD를 초기화 합니다.. begin은 이제 없음
   lcd.init();
-  // I2C LCD의 백라이트를 켜줍니다.
   lcd.backlight();
   lcd.setCursor(0,0);   
   lcd.print("pplayer :");
