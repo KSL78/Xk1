@@ -13,7 +13,6 @@ void setup() {
   Serial.begin(9600);
   pinMode(6,OUTPUT);
   pinMode(7,OUTPUT);
-  
   Wire.begin();
   while(!huskylens.begin(Wire))
   {
@@ -23,13 +22,18 @@ void setup() {
 }
 
 void loop() {
+  if (!huskylens.request()) Serial.println(F("Fail to request data from HUSKYLENS, recheck the connection!"));
+  else if (!huskylens.isLearned()) Serial.println(F("Nothing learned, press learn button on HUSKYLENS to learn one!"));
+  else if (!huskylens.available()) Serial.println(F("No block or arrow appears on the screen!"));
+  else
+  {
+    
     while (huskylens.available())
     {
       HUSKYLENSResult result = huskylens.read();
       ptdata(result);
-      
     }
-  
+  }
 }
 void ptdata(HUSKYLENSResult result)
 {
