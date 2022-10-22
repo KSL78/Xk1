@@ -1,14 +1,22 @@
 #include<Stepper.h>
 #include"HUSKYLENS.h"
 #include<Wire.h>
-#include<LiquidCrystal_I2C.h>
+#include <LiquidCrystal_I2C.h>
 HUSKYLENS huskylens;
 void printResult(HUSKYLENSResult result);
 const int stepv = 512;//각도 90도
 Stepper mStepper(stepv,11,9,10,8);
-int udt,cdt;
-LiquidCrystal_I2C lcd(0x27,16,2);
+int a=0,b=0;
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 void setup() {
+  // I2C LCD를 초기화 합니다.. begin은 이제 없음
+  lcd.init();
+  // I2C LCD의 백라이트를 켜줍니다.
+  lcd.backlight();
+  lcd.setCursor(0,0);   
+  lcd.print("pplayer :");
+  lcd.setCursor(0,1);
+  lcd.print("nplayer :");
   mStepper.setSpeed(28);//속도
   Serial.begin(9600);
   pinMode(6,OUTPUT);
@@ -22,9 +30,18 @@ void setup() {
 }
 
 void loop() {
-  if (!huskylens.request()) Serial.println(F("Fail to request data from HUSKYLENS, recheck the connection!"));
-  else if (!huskylens.isLearned()) Serial.println(F("Nothing learned, press learn button on HUSKYLENS to learn one!"));
-  else if (!huskylens.available()) Serial.println(F("No block or arrow appears on the screen!"));
+  lcd.setCursor(0,0);   
+  lcd.print("pplayer :");
+  lcd.setCursor(0,1);
+  lcd.print("nplayer :");
+  lcd.setCursor(10,0);           // 0번째 줄 0번째 셀부터 입력하게 합니다.
+  lcd.print(a);
+  lcd.setCursor(10,1);           // 1번째 줄 0번째 셀부터 입력하게 합니다.
+  lcd.print(b); 
+  
+  if (!huskylens.request()) Serial.println(F("데이터가 요청되지 않았습니다.."));
+  else if (!huskylens.isLearned()) Serial.println(F("읽을수없습니다."));
+  else if (!huskylens.available()) Serial.println(F("이용가능하지 않습니다."));
   else
   {
     
@@ -33,7 +50,9 @@ void loop() {
       HUSKYLENSResult result = huskylens.read();
       ptdata(result);
     }
+    
   }
+  delay(1000);
 }
 void ptdata(HUSKYLENSResult result)
 {
@@ -45,13 +64,16 @@ void ptdata(HUSKYLENSResult result)
          
       delay(6000);        
       mStepper.step(-stepv);
-      delay(2000);
       digitalWrite(6,LOW);
+      a=a+1;
+      lcd.clear();
     }
     else {
       digitalWrite(7,HIGH);
       delay(1000);
       digitalWrite(7,LOW);
+      b=b+1;
+      lcd.clear();
     }
   }
 
