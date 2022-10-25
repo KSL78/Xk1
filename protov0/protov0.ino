@@ -6,7 +6,7 @@ HUSKYLENS huskylens;
 void printResult(HUSKYLENSResult result);
 const int stepv = 512;//각도 90도
 Stepper mStepper(stepv,11,9,10,8);
-int a=0,b=0;
+int a=0,b=0,eds = 0;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 void setup() {
   lcd.init();
@@ -32,30 +32,26 @@ void loop() {
   lcd.print("pplayer :");
   lcd.setCursor(0,1);
   lcd.print("nplayer :");
-  lcd.setCursor(10,0);           // 0번째 줄 0번째 셀부터 입력하게 합니다.
+  lcd.setCursor(10,0);           
   lcd.print(a);
-  lcd.setCursor(10,1);           // 1번째 줄 0번째 셀부터 입력하게 합니다.
+  lcd.setCursor(10,1);           
   lcd.print(b); 
-  
-  if (!huskylens.request()) Serial.println(F("데이터가 요청되지 않았습니다.."));
-  else if (!huskylens.isLearned()) Serial.println(F("읽을수없습니다."));
-  else if (!huskylens.available()) Serial.println(F("이용가능하지 않습니다."));
+  if (huskylens.available())
+  {
+    HUSKYLENSResult result = huskylens.read();
+    mtmove(result);
+  }
   else
   {
-    
-    while (huskylens.available())
-    {
-      HUSKYLENSResult result = huskylens.read();
-      ptdata(result);
-    }
-    
+    edst();
   }
+  
   delay(1000);
 }
-void ptdata(HUSKYLENSResult result)
+void mtmove(HUSKYLENSResult result)
 {
   if (result.command == COMMAND_RETURN_BLOCK) {
-    Serial.println(String()+F("사용자 ID:")+result.ID);
+    Serial.println(String()+F("ID NUMBER:")+result.ID);
     if (result.ID == 1 || result.ID == 2) {
       digitalWrite(6,HIGH);
       mStepper.step(stepv);
@@ -76,3 +72,18 @@ void ptdata(HUSKYLENSResult result)
   }
 
 }
+void edst()
+{
+  if (!huskylens.request()) natvque();
+  else if (!huskylens.available()) natvavali();
+}
+
+void natvque(){
+  
+  Serial.println(F("카메라의 데이터가 전송되지 않습니다. 카메라 전원을 확인하여 주십시오."));
+  
+}
+void natvavali(){
+  Serial.println(F("데이터에 없습니다. 얼굴을 인식하여 주십시오."));
+}
+// 객체로 쓸수 있었는데 아깝다.......
