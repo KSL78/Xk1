@@ -11,40 +11,21 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 class Stcerov
 {
   private:
-    int str=0;
+    int svl=0;
   public:
     Stcerov(int vam1){
-      str=vam1;    
+      svl=vam1;    
     }
     void prtc();
 };
 void Stcerov::prtc(){
-  if (str == 1)
-  {
-    digitalWrite(5,HIGH);
-    digitalWrite(6,HIGH);
-    delay(1000);
-    digitalWrite(5,LOW);
-    digitalWrite(6,LOW);
-    eds=1;
-    //"카메라의 데이터가 전송되지 않습니다. 카메라 전원을 확인하여 주십시오."
-  }
-  else if (str == 2)
-  {
-    digitalWrite(5,HIGH);
-    digitalWrite(7,HIGH);
-    delay(1000);
-    digitalWrite(5,LOW);
-    digitalWrite(7,LOW);
-    eds=2;
-    //"데이터에 없습니다. 얼굴을 인식하여 주십시오."
-  }
-  else if (str == 5)
-  {
-    digitalWrite(7,HIGH);
-    delay(1000);
-    digitalWrite(7,LOW);
-  }
+  digitalWrite(svl,HIGH);
+  delay(1000);
+  digitalWrite(svl,LOW);
+  eds=svl;
+  //5="카메라의 데이터가 전송되지 않습니다. 카메라 전원을 확인하여 주십시오."
+  //6="데이터에 없습니다. 얼굴을 인식하여 주십시오."
+  //7="카메라가 시작되지 않았습니다. 카메라를 연결하여 주십시오."
 }
 void setup() {
   lcd.init();
@@ -57,9 +38,8 @@ void setup() {
   Wire.begin();
   while(!huskylens.begin(Wire))
   {
-    Stcerov bval(5);
+    Stcerov bval(7);
     bval.prtc();
-    eds=5;
     delay(100);
   }
 }
@@ -88,12 +68,12 @@ void loop() {
   }
   else if (!huskylens.request())
   {
-    Stcerov req(1);
+    Stcerov req(5);
     req.prtc();
   }
   else if (!huskylens.available()) 
   {
-    Stcerov aval(2);
+    Stcerov aval(6);
     aval.prtc();
   } 
   delay(1000);
@@ -115,8 +95,10 @@ void mtmove(HUSKYLENSResult result)
     }
     else {
       digitalWrite(5,HIGH);
+      digitalWrite(7,HIGH);
       delay(1000);
       digitalWrite(5,LOW);
+      digitalWrite(7,LOW);
       b=b+1;
     }
   }
