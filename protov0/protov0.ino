@@ -27,6 +27,9 @@ void Stcerov::prtc(){
   //6="데이터에 없습니다. 얼굴을 인식하여 주십시오."
   //7="카메라가 시작되지 않았습니다. 카메라를 연결하여 주십시오."
 }
+Stcerov req(5);
+Stcerov aval(6);
+Stcerov bval(7);
 void setup() {
   lcd.init();
   lcd.backlight();
@@ -38,11 +41,12 @@ void setup() {
   Wire.begin();
   while(!huskylens.begin(Wire))
   {
-    Stcerov bval(7);
+    
     bval.prtc();
     delay(100);
   }
 }
+
 void loop() {
   lcd.setCursor(0,0);   
   lcd.print("pp:");
@@ -68,12 +72,12 @@ void loop() {
   }
   else if (!huskylens.request())
   {
-    Stcerov req(5);
+    //Stcerov req(5);
     req.prtc();
   }
   else if (!huskylens.available()) 
   {
-    Stcerov aval(6);
+    //Stcerov aval(6);
     aval.prtc();
   } 
   delay(1000);
