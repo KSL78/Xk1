@@ -8,7 +8,7 @@ const int stepv = 512;//각도 90도
 Stepper mStepper(stepv,11,9,10,8);
 int a=0,b=0,eds = 0;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-class Stcerov
+class Stcerov //오류 검출용 클레스
 {
   private:
     int svl=0;
@@ -41,7 +41,6 @@ void setup() {
   Wire.begin();
   while(!huskylens.begin(Wire))
   {
-    
     bval.prtc();
     delay(100);
   }
@@ -72,12 +71,10 @@ void loop() {
   }
   else if (!huskylens.request())
   {
-    //Stcerov req(5);
     req.prtc();
   }
   else if (!huskylens.available()) 
   {
-    //Stcerov aval(6);
     aval.prtc();
   } 
   delay(1000);
