@@ -31,7 +31,7 @@ Stcerov req(5);
 Stcerov aval(6);
 Stcerov bval(7);
 void setup() {
-  lcd.init();
+  lcd.init();//led 사용
   lcd.backlight();
   mStepper.setSpeed(28);//속도
   Serial.begin(9600);
@@ -52,17 +52,17 @@ void loop() {
   lcd.setCursor(0,1);
   lcd.print("np:");
   lcd.setCursor(3,0);           
-  lcd.print(a);
+  lcd.print(a); //정상사용자
   lcd.setCursor(3,1);           
-  lcd.print(b);
+  lcd.print(b); //부정사용자
   lcd.setCursor(9,0);   
-  lcd.print("ec:");
+  lcd.print("ec:"); 
   lcd.setCursor(12,0);   
-  lcd.print(eds);
+  lcd.print(eds);// 오류코드 검출
   lcd.setCursor(9,1);   
-  lcd.print("p:");
+  lcd.print("p:"); 
   lcd.setCursor(12,1);   
-  lcd.print("0");
+  lcd.print("0"); // 인물 코드 확인
   if (huskylens.available())
   {
     HUSKYLENSResult result = huskylens.read();
@@ -79,7 +79,7 @@ void loop() {
   } 
   delay(1000);
 }
-void mtmove(HUSKYLENSResult result)
+void mtmove(HUSKYLENSResult result)//구동 함수
 {
   if (result.command == COMMAND_RETURN_BLOCK) {
     if (result.ID == 1 || result.ID == 2) {
