@@ -76,7 +76,8 @@ void loop() {
   else if (!huskylens.available()) 
   {
     aval.prtc();
-  } 
+  }
+  
   delay(1000);
 }
 void mtmove(HUSKYLENSResult result)//구동 함수
