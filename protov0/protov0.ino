@@ -89,7 +89,7 @@ void mtmove(HUSKYLENSResult result)//구동 함수
       digitalWrite(6,HIGH);
       digitalWrite(7,HIGH);
       mStepper.step(stepv);  
-      delay(6000);        
+      delay(3000);        
       mStepper.step(-stepv);
       digitalWrite(6,LOW);
       digitalWrite(7,LOW);
