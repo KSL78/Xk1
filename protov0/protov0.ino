@@ -18,14 +18,14 @@ class Stcerov //오류 검출용 클레스
     }
     void prtc();
 };
-void Stcerov::prtc(){
+void Stcerov::prtc(){//오류 검출용
   digitalWrite(svl,HIGH);
   delay(1000);
   digitalWrite(svl,LOW);
   eds=svl;
-  //5="카메라의 데이터가 전송되지 않습니다. 카메라 전원을 확인하여 주십시오."
-  //6="데이터에 없습니다. 얼굴을 인식하여 주십시오."
-  //7="카메라가 시작되지 않았습니다. 카메라를 연결하여 주십시오."
+  //5="카메라의 데이터가 전송되지 않습니다. 카메라 전원을 확인하여 주십시오."r
+  //6="데이터에 없습니다. 얼굴을 인식하여 주십시오." g
+  //7="카메라가 시작되지 않았습니다. 카메라를 연결하여 주십시오."b
 }
 Stcerov req(5);
 Stcerov aval(6);
